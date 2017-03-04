@@ -21,7 +21,7 @@ your controller in the code.
 
 If you need help drop me a line and I shure will be more than happy to give you a hand.
 
-#TODO
+###TODO
 eventualy automap or select the game controller
 
 
