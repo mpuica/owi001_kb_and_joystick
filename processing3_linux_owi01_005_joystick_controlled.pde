@@ -1,20 +1,47 @@
 /* 
    Processing sketch that send a ascii byte character to Arduino which
    then subsquentally controls a motor   
+
+Linux :
+
+Logitech Logitech Attack 3( 2 ) has:
+ 3 sliders
+ 11 buttons
+   Buttons (11)
+    Type     Name               Multiplier
+    button    Trigger             -
+    button    Thumb               -
+    button    Thumb 2             -
+    button    Top                 -
+    button    Top 2               -
+    button    Pinkie              -
+    button    Base                -
+    button    Base 2              -
+    button    Base 3              -
+    button    Base 4              -
+    button    Base 5              -
+
+   Sliders (3)
+    Type     Name               Multiplier     Tolerance
+    slider    x                   1.0            0.0            absolute
+    slider    y                   1.0            0.0            absolute
+    slider    z                   1.0            0.0            absolute
    the ascii key is controlled by joystick.
  
 */
- 
+import org.gamecontrolplus.gui.*;
+import org.gamecontrolplus.*;
+import net.java.games.input.*;
+
 import processing.serial.*;
-import procontroll.*;
 import java.io.*;
 
-ControllIO controll;
-ControllSlider sliderX;
-ControllSlider sliderY;
-ControllButton button;
-ControllDevice device;
-ControllButton b10, b11, b2, b3, b4, b5, b1;
+ControlIO controll;
+ControlSlider sliderX;
+ControlSlider sliderY;
+ControlButton button;
+ControlDevice device;
+ControlButton b10, b11, b2, b3, b4, b5, b1;
 
 float xpos; 
 float ypos; 
@@ -40,27 +67,23 @@ void setup()  {
   // Make sure to open the port at the same speed Arduino is using (9600bps)
   port = new Serial(this, Serial.list()[0], 9600);  
  
- controll = ControllIO.getInstance(this);
+ controll = ControlIO.getInstance(this);
   for (int i = 0; i < controll.getNumberOfDevices(); i++) {
-    ControllDevice device = controll.getDevice(i);    
+    ControlDevice device = controll.getDevice(i);    
       println(device.getName()+"( "+i+" ) has:");
       println(" " + device.getNumberOfSliders() + " sliders");
       println(" " + device.getNumberOfButtons() + " buttons");
-      println(" " + device.getNumberOfSticks() + " sticks");
-      device.printSliders();
-      device.printButtons();
-      device.printSticks();    
   }
-  device = controll.getDevice("Logitech Attack 3");
-  sliderX = device.getSlider(2);//left to right = -1 +1 => base motor
-  sliderY = device.getSlider(1);//front to back = -1 +1 => elbow motor
-  b10 = device.getButton(9); //shoulder motor up
-  b11 = device.getButton(10); //shoulder motor down
-  b1 = device.getButton(0);//reset - trigger button
-  b2 = device.getButton(1);//wrist motor dpwn
-  b3 = device.getButton(2);//whrist motor up
-  b4 = device.getButton(3);//grip motor open
-  b5 = device.getButton(4);//grip close  
+  device = controll.getDevice("Logitech Logitech Attack 3");
+  sliderX = device.getSlider("x");//left to right = -1 +1 => base motor
+  sliderY = device.getSlider("y");//front to back = -1 +1 => elbow motor
+  b10 = device.getButton("Base 4"); //shoulder motor up
+  b11 = device.getButton("Base 5"); //shoulder motor down
+  b1 = device.getButton("Trigger");//reset - trigger button
+  b2 = device.getButton("Thumb");//wrist motor dpwn
+  b3 = device.getButton("Thumb 2");//whrist motor up
+  b4 = device.getButton("Top");//grip motor open
+  b5 = device.getButton("Top 2");//grip close  
 }
  
 void draw() 
